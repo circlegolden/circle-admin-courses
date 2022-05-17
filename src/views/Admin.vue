@@ -1,15 +1,15 @@
 <template>
-  <div class="home">
+  <div class="admin">
     <el-container >
       <el-header style="margin-left: -20px">
         <Header></Header>
       </el-header>
       <el-container>
-        <el-aside>
+        <el-aside style="width: 200px">
           <Aside></Aside>
-          </el-aside>
-        <el-main style="margin-left:-20px">
-          <Table_stu></Table_stu>
+        </el-aside>
+        <el-main style="margin-left: 20px">
+          <router-view style="margin-top: 10px"/>
         </el-main>
       </el-container>
     </el-container>
@@ -17,21 +17,18 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
-
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
-import Table_stu from "@/components/Table_stu";
-
-
 
 export default {
-  name: 'HomeView',
+  name: "Admin",
   components: {
     Aside,
     Header,
-    Table_stu
-  }
+  },
 }
 </script>
+
+<style scoped>
+
+</style>
