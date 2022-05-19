@@ -20,7 +20,10 @@ npm run build
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
-#courses-back
+# courses-back
 
-##Just runing the file 'CoursesBackApplication.java' is enough.
+## run the back-end
+```
+Just runing the file 'CoursesBackApplication.java' is enough.
+```
 
