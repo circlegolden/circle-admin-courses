@@ -2,7 +2,7 @@ package com.example.courses_back.entity;
 
 import lombok.Data;
 
-@Data
+@Data //学生成绩信息
 public class stu_grade {
     private String stuid;
     private String stuname;

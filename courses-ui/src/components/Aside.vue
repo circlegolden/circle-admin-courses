@@ -26,7 +26,7 @@
         </el-menu-item>
         <el-menu-item index="/Table_open" >
           <i class="el-icon-bank-card"></i>
-          <span slot="title">开课情况</span>
+          <span slot="title">选课情况</span>
         </el-menu-item>
         <el-menu-item index="/Table_grade" >
           <i class="el-icon-bank-card"></i>
@@ -34,7 +34,7 @@
         </el-menu-item>
         <el-menu-item index="/Table_del">
           <i class="el-icon-message-solid"></i>
-          <span slot="title">退课工单</span>
+          <span slot="title">学分完成情况</span>
         </el-menu-item>
         <el-menu-item index="/Table_data">
           <i class="el-icon-message-solid"></i>

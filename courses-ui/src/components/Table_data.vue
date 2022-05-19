@@ -1,52 +1,95 @@
 <template>
   <!--为echarts准备一个具备大小的容器dom-->
-  <div id="main" style="width:1350px;height:600px;"></div>
+  <div>
+  <el-row :gutter="20">
+    <el-col :span="4" >
+      <el-select v-model="valueterm" placeholder="请选择学期" @change="chageterm">
+        <el-option
+            v-for="(term,key) in optionterm"
+            :key="term"
+            :label="term"
+            :value="term">
+        </el-option>
+      </el-select>
+    </el-col>
+     <el-col :span="4">
+       <el-select v-model="valuecou" placeholder="请选择课号">
+         <el-option
+             v-for="(cou,key) in optioncou"
+             :key="cou"
+             :label="cou"
+             :value="cou">
+         </el-option>
+       </el-select>
+     </el-col>
+    <el-col :span="4">
+      <el-button type="primary" style="margin-left: -30px" @click="valuedata">统计</el-button>
+    </el-col>
+  </el-row>
+
+    <el-row>
+    <el-col :span="12">
+      <div id="pie" style="width:500px;height:500px;margin-top: 50px"></div>
+    </el-col>
+    <el-col :span="12">
+      <div id="col" style="width:500px;height:500px;"></div>
+    </el-col>
+  </el-row>
+  </div>
+
 </template>
 <script>
 import * as echarts from 'echarts';
+import request from "@/utils/request";
 
 export default {
   name: '',
   data() {
     return {
-      charts: '',
-      avgList: null,
-      timeList: null,
-      xData: ['8','2','3','4','5','6'],
-      cpuId: ''
-    }
-  },
-  methods: {
-
-    open() {
-      this.$alert('请点击CPU数据分析页面的数据可视化按钮进行查询', '提示！！', {
-        confirmButtonText: '确定'
-      });
-    },
-    getDataList(){
-      cpu.getEchartsList(this.cpuId)
-          .then(response=>{
-            this.avgList=response.data.avgList
-            this.timeList=response.data.timeList
-            //console.log(this.opinionData)
-            console.log(this.timeList)
-            console.log(this.xData)
-
-            this.$nextTick(function() {
-              this.drawLine('main')
-            })
-          }).catch(error=>{
-        console.log(error)
-      })
-    },
-    drawLine(id) {
-      this.charts = echarts.init(document.getElementById(id))
-      this.charts.setOption({
+        optionterm: [
+         ],
+        valueterm: '',
+      optioncou: [
+        ],
+      valuecou: '',
+      pieoption : {
+        title: {
+          text: '教师班级人数',
+          subtext: 'Student Number',
+          left: 'center'
+        },
         tooltip: {
-          trigger: 'axis'
+          trigger: 'item'
         },
         legend: {
-          data: ['服务器CPU使用情况']
+          orient: 'vertical',
+          left: 'left'
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: '50%',
+            data: [
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      },
+      piemyChart: '',
+      piechartDom : '',
+      coloption :{
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
         },
         grid: {
           left: '3%',
@@ -54,45 +97,73 @@ export default {
           bottom: '3%',
           containLabel: true
         },
-
-        toolbox: {
-          feature: {
-            saveAsImage: {}
+        xAxis: [
+          {
+            type: 'category',
+            data: '',
+            axisTick: {
+              alignWithLabel: true
+            }
           }
-        },
-        xAxis: {
-          type: 'category',
-          boundaryGap: false,
-          //data:
-          data: this.timeList
-        },
-        yAxis: {
-          type: 'value'
-        },
-
-        series: [{
-          name: '服务器CPU使用情况',
-          type: 'line',
-          stack: '总量',
-          data: this.avgList
-        }]
-      })
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        series: [
+          {
+            name: 'Direct',
+            type: 'bar',
+            barWidth: '60%',
+            data: ''
+          }
+        ]
+      },
+      colmyChart: '',
+      colchartDom : '',
     }
   },
-  //调用
-  created(){
-    if(this.$route.params && this.$route.params.id){
-      this.cpuId=this.$route.params.id
-      if(this.cpuId==":id"){
-        this.open()
-      }
-      console.log("========="+this.cpuId)
-    }
-    this.getDataList()
+  methods: {
+    chageterm(){
+     request.get("/admin/couidlist/"+this.valueterm
+     ).then(res => {
+       console.log(res)
+       this.optioncou=res
+     })
+    },
+    valuedata(){
+      request.get("/admin/classdata",{
+        params: {
+          term: this.valueterm,
+          couid: this.valuecou,
+        }
+      }).then(res =>{
+        this.pieoption.series[0].data=res
+        this.piechartDom= document.getElementById('pie')
+        this.piemyChart = echarts.init(this.piechartDom);
+        this.piemyChart.setOption(this.pieoption);
+      }),
+          request.get("/admin/avgrade",{
+            params: {
+              term: this.valueterm,
+              couid: this.valuecou,
+            }
+          }).then(res =>{
+            console.log(res.name)
+            this.coloption.xAxis[0].data=res.name;
+            this.coloption.series[0].data=res.avg;
+            this.colchartDom=document.getElementById('col');
+            this.colmyChart=echarts.init(this.colchartDom);
+            this.colmyChart.setOption(this.coloption);
+          })
+    },
   },
-
+//页面元素渲染之后再触发
   mounted() {
-
+    request.get("/admin/termlist").then(res => {
+      this.optionterm=res
+    });
   }
 }
 </script>

@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.util.List;
 
-@Data
+@Data //班级信息
 public class tea_class {
     private String couid;
     private String term;
@@ -12,4 +12,5 @@ public class tea_class {
     private String couname;
     private int num;
     private String teaname;
+    private String classtime;
 }

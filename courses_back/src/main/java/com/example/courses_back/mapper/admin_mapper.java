@@ -1,6 +1,5 @@
 package com.example.courses_back.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.courses_back.controller.adminDTO.admindto;
 import com.example.courses_back.entity.*;
 import org.apache.ibatis.annotations.*;
@@ -84,4 +83,21 @@ public interface admin_mapper {
     List<stu_grade> stugradepage(String term, int pagetop, int pagesize);
 
     int updatestugrade(stu_grade stu_grade);
+
+    @Select("SELECT DISTINCT couid from choose_courses_data WHERE term= #{term}")
+    List<String> couidlist(String term);
+
+    @Select("SELECT c.teaid,count(stuid) as num ,t.name from choose_courses_data c" +
+            " left JOIN tea_person_data t on c.teaid=t.tno  WHERE c.term=#{term} and c.couid=#{couid} GROUP BY c.teaid;")
+    List<class_data> class_data(String term,String couid);
+
+    @Select("SELECT c.teaid,avg(CONVERT(c.finper, UNSIGNED INTEGER)) as avggrade ,t.name from choose_courses_data c " +
+            "left JOIN tea_person_data t on c.teaid=t.tno  WHERE c.term=#{term}" +
+            " and c.couid=#{couid}and c.finper IS NOT null GROUP BY c.teaid")
+    List<avggrade> avggradelist(String term,String couid);
+
+    List<avgjidian> avgjidians(int pagetop,int pagesize);
+
+    List<avgjidian> avgjidiantotal();
+
 }

@@ -17,6 +17,8 @@
         </el-table-column>
         <el-table-column prop="teaname" label="教师" width="100" >
         </el-table-column>
+        <el-table-column prop="classtime" label="上课时间" width="100" >
+        </el-table-column>
         <el-table-column prop="num" label="班级人数" width="100" >
         </el-table-column>
       </el-table>

@@ -20,15 +20,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="classes" resultType="com.example.courses_back.entity.tea_class">
-        select c.teaid,c.term,c.couid,count(c.stuid) as num ,cd.`name` as couname ,t.name as teaname from choose_courses_data c
+        select c.teaid,c.term,c.couid,count(c.stuid) as num ,cd.`name` as couname ,t.name as teaname,oc.class_time as classtime from choose_courses_data c
             left join courses_data cd on c.couid=cd.couid
-            left JOIN tea_person_data t on c.teaid =t.tno gROUP BY c.teaid,c.term,c.couid  limit #{pagetop},#{pagesize}
+            left JOIN tea_person_data t on c.teaid =t.tno left join open_courses_data oc on oc.term=c.term and oc.cou_id=c.couid and oc.tea_id=c.teaid gROUP BY c.teaid,c.term,c.couid  limit #{pagetop},#{pagesize}
     </select>
 
     <select id="classes_num" resultType="com.example.courses_back.entity.tea_class">
-        select c.teaid,c.term,c.couid,count(c.stuid) as num ,cd.`name` as couname ,t.name as teaname from choose_courses_data c
+        select c.teaid,c.term,c.couid,count(c.stuid) as num ,cd.`name` as couname ,t.name as teaname,oc.class_time as classtime from choose_courses_data c
                                                                                                               left join courses_data cd on c.couid=cd.couid
-                                                                                                              left JOIN tea_person_data t on c.teaid =t.tno gROUP BY c.teaid,c.term,c.couid
+                                                                                                              left JOIN tea_person_data t on c.teaid =t.tno
+                                                                                                              left join open_courses_data oc on oc.term=c.term and oc.cou_id=c.couid and oc.tea_id=c.teaid
+        gROUP BY c.teaid,c.term,c.couid
     </select>
 
     <select id="stugrade" resultType="com.example.courses_back.entity.stu_grade">
@@ -45,5 +47,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updatestugrade">
         update choose_courses_data set usuper=#{usuper},finper=#{finper},tesper=#{tesper},jidian=#{jidian} where stuid=#{stuid} and term=#{term} and teaid=#{teaid} and couid=#{couid}
     </update>
+
+    <select id="avgjidians" resultType="com.example.courses_back.entity.avgjidian">
+        SELECT SUM(ccd.jidian*(cd.xf/sm.sumxf)) as avggrade, sm.sumxf,stu.name,stu.sno FROM choose_courses_data ccd
+                                                                                                LEFT JOIN stu_person_data stu on ccd.stuid=stu.sno LEFT JOIN
+                                                                                            courses_data cd on cd.couid=ccd.couid left JOIN stusumxf sm on sm.stuid=stu.sno
+        WHERE ccd.jidian is NOT null GROUP BY stu.sno limit #{pagetop},#{pagesize};
+    </select>
+    <select id="avgjidiantotal" resultType="com.example.courses_back.entity.avgjidian">
+        SELECT SUM(ccd.jidian*(cd.xf/sm.sumxf)) as avggrade, sm.sumxf,stu.name,stu.sno FROM choose_courses_data ccd
+                                                                                                LEFT JOIN stu_person_data stu on ccd.stuid=stu.sno LEFT JOIN
+                                                                                            courses_data cd on cd.couid=ccd.couid left JOIN stusumxf sm on sm.stuid=stu.sno
+        WHERE ccd.jidian is NOT null GROUP BY stu.sno ;
+    </select>
+
+
 
 </mapper>

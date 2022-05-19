@@ -3,7 +3,7 @@ package com.example.courses_back.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
-@Data
+@Data //教师信息
 public class Teacher {
     String tno;
     String name;

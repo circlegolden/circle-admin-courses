@@ -14,6 +14,8 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +175,62 @@ public class admin_controller {
     @PutMapping("/updatestugrade")
     public boolean updategrade(@RequestBody stu_grade stu_grade){
         return adminservice.updatestugrade(stu_grade)==1;
+    }
+
+    @GetMapping("/couidlist/{term}")
+    public Map<Integer,String> couidlist(@PathVariable String term){
+        Map<Integer,String> map=new HashMap<>();
+        for (int i=0;i<admin_mapper.couidlist(term).size();i++){
+            map.put(i,admin_mapper.couidlist(term).get(i));
+        }
+        return map;
+    }
+
+    @GetMapping("/classdata")
+    public List<classdatamap> datamap(@RequestParam String term,@RequestParam String couid){
+        List<class_data> class_data=admin_mapper.class_data(term,couid);
+        List<classdatamap> map=new ArrayList<>();
+        for (int i=0;i<class_data.size();i++){
+            classdatamap tempclass=new classdatamap();
+            tempclass.setValue(class_data.get(i).getNum());
+            tempclass.setName(class_data.get(i).getTeaid()+" "+class_data.get(i).getName());
+            map.add(tempclass);
+        }
+        return map;
+    }
+
+    @GetMapping("/avgrade")
+    public Map<String,Object> avgmap(@RequestParam String term,@RequestParam String couid){
+        List<avggrade> avggrades= admin_mapper.avggradelist(term,couid);
+        Map<String,Object> map=new HashMap<>();
+        ArrayList<String> namemap=new ArrayList<>();
+        for(int i=0;i<avggrades.size();i++){
+            namemap.add(avggrades.get(i).getTeaid()+" "+avggrades.get(i).getName());
+        }
+        map.put("name",namemap);
+        ArrayList<Double> avgmap=new ArrayList<>();
+        for (int i=0;i<avggrades.size();i++){
+            avgmap.add(avggrades.get(i).getAvggrade());
+        }
+        map.put("avg",avgmap);
+        return map;
+    }
+
+    @GetMapping("/avgjidian")
+    public Map<String,Object> avgjidian(@RequestParam Integer pageSize,@RequestParam Integer pageNum){
+        int pagetop=(pageNum-1)*pageSize;
+        int total=admin_mapper.avgjidiantotal().size();
+        //返回数据的size
+        List<avgjidian> data=admin_mapper.avgjidians(pagetop,pageSize);
+        java.text.DecimalFormat df=new java.text.DecimalFormat("#.00");
+        for(int i=0;i<data.size();i++){
+            BigDecimal b  =  new  BigDecimal(data.get(i).getAvggrade());
+            data.get(i).setAvggrade(Double.parseDouble(df.format(b.setScale(2,  BigDecimal.ROUND_HALF_UP).doubleValue())));
+        }
+        Map<String ,Object> map=new HashMap<>();
+        map.put("data",data);
+        map.put("total",total);
+        return map;
     }
 
 }
