@@ -52,13 +52,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT SUM(ccd.jidian*(cd.xf/sm.sumxf)) as avggrade, sm.sumxf,stu.name,stu.sno FROM choose_courses_data ccd
                                                                                                 LEFT JOIN stu_person_data stu on ccd.stuid=stu.sno LEFT JOIN
                                                                                             courses_data cd on cd.couid=ccd.couid left JOIN stusumxf sm on sm.stuid=stu.sno
-        WHERE ccd.jidian is NOT null GROUP BY stu.sno limit #{pagetop},#{pagesize};
+        WHERE ccd.jidian!="null" GROUP BY stu.sno limit #{pagetop},#{pagesize};
     </select>
     <select id="avgjidiantotal" resultType="com.example.courses_back.entity.avgjidian">
         SELECT SUM(ccd.jidian*(cd.xf/sm.sumxf)) as avggrade, sm.sumxf,stu.name,stu.sno FROM choose_courses_data ccd
                                                                                                 LEFT JOIN stu_person_data stu on ccd.stuid=stu.sno LEFT JOIN
                                                                                             courses_data cd on cd.couid=ccd.couid left JOIN stusumxf sm on sm.stuid=stu.sno
-        WHERE ccd.jidian is NOT null GROUP BY stu.sno ;
+        WHERE  ccd.jidian!="null" GROUP BY stu.sno ;
     </select>
 
 
