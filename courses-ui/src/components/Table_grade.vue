@@ -70,7 +70,7 @@
         </el-table-column>
         <el-table-column prop="finper" label="总成绩" width="100" sortable >
         </el-table-column>
-        <el-table-column prop="jidian" label="jidian" width="100" sortable >
+        <el-table-column prop="jidian" label="绩点" width="100" sortable >
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">

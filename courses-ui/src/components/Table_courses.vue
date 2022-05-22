@@ -6,7 +6,7 @@
         <el-button type="primary" style="margin-left: 20px;width: 100px" @click="load">课名查询</el-button>
 
         <el-button type="primary" @click="handleadd">新增</el-button>
-        <el-dialog title="个人信息" :visible.sync="dialogFormVisible">
+        <el-dialog title="课程信息" :visible.sync="dialogFormVisible">
           <el-form :model="formLabelAlign"  label-width="80px">
             <el-form-item label="课程号" style="width: 300px">
               <el-input v-model="formLabelAlign.couid"></el-input>

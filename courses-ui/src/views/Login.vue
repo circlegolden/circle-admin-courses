@@ -54,7 +54,7 @@ export default {
   width: 200px;
 }
 .login{
-  background-image: url("../assets/login_back.jpg") ;
+  background-image: url("../router/assets/login_back.jpg") ;
   width: 1200px;
   height: 600px;
   margin-left: 180px;
