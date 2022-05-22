@@ -24,6 +24,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## run the back-end
 ```
-Just runing the file 'CoursesBackApplication.java' is enough.
+Just running the file 'CoursesBackApplication.java' is enough.
 ```
 
