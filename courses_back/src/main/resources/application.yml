@@ -17,3 +17,15 @@ mybatis:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+person:
+  name: yuanyuan
+  book:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+  admin:
+    id: 123
+    pwd: one
+  abc: {1: 2, 3: 4 ,5: 6}
